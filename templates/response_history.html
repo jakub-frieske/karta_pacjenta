@@ -1,0 +1,67 @@
+{% if data %}
+
+{#<div class="form-group">#}
+{#    <label>{{ row_history.toString }}</label>#}
+{#    <table border="0" width="100%">#}
+{#    <tr style="padding: 20px;">#}
+{#        <td width="300">{{ row_history.date }}</td>#}
+{#        <td></td>#}
+{#        <td width="600">{{ row_history.before }}</td>#}
+{#    </tr>#}
+{#    </table>#}
+{#</div>#}
+    <style>
+    table {
+  margin: 1em 0;
+  border-collapse: collapse;
+  border: 0.1em solid #d6d6d6;
+}
+
+th,
+td {
+  padding: 0.25em 0.5em 0.25em 1em;
+  vertical-align: text-top;
+  text-align: center;
+  text-indent: -0.5em;
+}
+
+th {
+  vertical-align: bottom;
+  background-color: #666;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+    </style>
+    <table id="editHisotory" >
+        <thead>
+        <tr>
+                <th>Data:</th>
+                <th>Nazwa:</th>
+            <th>Wartość:</th>
+        </tr>
+        </thead>
+       <tbody>
+       {% for row_history in data %}
+                <tr >
+                  <td>{{ row_history.date }}</td>
+                  <td>{{ row_history.before}} </td>
+                    {% if row_history.value %}
+                  <td>{{ row_history.value}} </td>
+            {% else %}
+                  <td> Recepta </td>
+                {% endif %}
+                </tr>
+           {% endfor %}
+       </tbody>
+    </table>
+{#{% endfor %}#}
+{% endif  %}
+

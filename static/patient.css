@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+#header {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    background: #3F51B5;
+}
+.first{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #757575;
+}
+
+.second{
+    width:100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    color: #FFFFFF;
+    padding-top: 5px;
+}
+
+
+#content {
+    margin: 40px;
+}
+#content h1{
+    color: #3F51B5;
+    font-weight: bold;
+}
+.title-chart{
+  display: flex;
+  justify-content: center;
+}
+.chart-click{
+  color: #757575;
+  display: flex;
+  justify-items: flex-end;
+}
+.chart-click:hover{
+  color: #3F51B5;
+}
+/* Datepicker by https://codepen.io/maheshambure21/pen/VYJQYG */
+.datepicker {
+  display: flex;
+  justify-content: center;
+}
+
+.filter_btn {
+  outline: none;
+  height: 40px;
+  text-align: center;
+  width: 130px;
+  border-radius: 40px;
+  background: #fff;
+  border: 2px solid #3F51B5;
+  color: #3F51B5;
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter_btn:hover {
+  color:white;
+  background: #3F51B5;
+}
+.filter_btn:active {
+  letter-spacing: 2px ;
+}
+
+.myinput {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+  width: 190px;
+  margin-right: 20px;
+  margin-left: 10px;
+
+}
+.myinput[type="date"] {
+  background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+}
+.myinput[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+.myinput[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+
+
+
+@media(max-width: 660px){
+  .datepicker {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+  }
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+
+    <title>Elektroniczna Karta Pacjenta</title>
+</head>
+<body>
+
+<div class="cards">
+    <h1>Elektroniczna Karta Pacjenta</h1>
+</div>
+
+<div class="cards">
+<div class="myform-group">
+    <input type="text" id="UserInput" onkeyup="SearchAndFilterThingy()" class="mysearch" autocomplete="off" placeholder="Search"  autofocus>
+
+</div>
+    <table id="PatientTable" class="styled-table">
+        <thead>
+        <tr>
+            {% for header in headings %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+    </table>
+<div class="table-container">
+    <table id="PatientTable2" class="styled-table">
+       <tbody>
+           {% for row in data %}
+                <tr class='clickable-row' data-href="{{ url_for('patient_history', id =row['id'] ) }}"  >
+                  <td>{{ row['name'] }}</td>
+                  <td>{{ row['surname'] }} </td>
+                  <td>{{ row['gender'] }}</td>
+                  <td>{{ row['birthday'] }}</td>
+                  <td>{{ row['identifier'] }}</td>
+                </tr>
+           {% endfor %}
+       </tbody>
+    </table>
+</div>
+</div>
+<script>
+         jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+           {#alert($(this).data("href"));#}
+            window.location = $(this).data("href");
+        });
+        });
+
+     function SearchAndFilterThingy() {
+  var input, filter, table, tr, td, x, re;
+  input = document.getElementById("UserInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("PatientTable2");
+  tr = table.getElementsByTagName("tr");
+  re = new RegExp("^"+filter+'.+$', 'i');
+
+  for (x = 0; x < tr.length; x++) {
+    td = tr[x].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().search(re) > -1) {
+        tr[x].style.display = "";
+      }
+      else {
+        tr[x].style.display = "none";
+      }
+    }
+  }
+}
+    </script>
+
+
+</body>
+</html>

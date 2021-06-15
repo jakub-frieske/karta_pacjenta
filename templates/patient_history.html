@@ -1,0 +1,90 @@
+{% macro page_history(data) %}
+<div class="wrapper">
+<div class="center-line">
+<a href="#" class="scroll-icon"><i class="fas fa-caret-up"></i></a>
+</div>
+{% for row in data %}
+<div class="row row-1">
+<section>
+    {% if row.type == 'medication' %}
+{#       <i class="icon fas fa-prescription-bottle-alt"></i>#}
+        <i class="icon fas fa-capsules"></i>
+    {% else %}
+      <i class="icon fas fa-notes-medical"></i>
+    {% endif %}
+
+  <div class="details">
+      <span class="title">
+          {% if row.history|length > 0  %}
+              <i class="fas fa-history view_history chart-click" value="{{ patient.id }}" name="view" data-id='{{ row.id }}'  style="font-size: 0.8rem; vertical-align: text-top;"></i>
+          {% endif %}
+          {{ row.name }}
+      </span>
+
+      <span class="timeline-date">{{ row.date|datetime }}</span>
+
+  </div>
+
+{% if row.type == 'value' %}
+    <p >{{ row.value}}  {{ row.unit }}</p>
+{% elif row.type =='values' %}
+    {% for row2 in row['values'] %}
+    <p style="font-weight: bold">{{ row2.name}}: </p>
+        <p> {{ row2.value}}  {{ row2.unit }}</p>
+    {% endfor %}
+{% endif %}
+  <div class="bottom">
+    <a href="/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Edytuj</a>
+      {% if row.category %}
+        <i>{{ row.category }}</i>
+      {% endif %}
+  </div>
+     <div id="modaledit{{ row.id }}" class="modal fade" role="dialog">
+           <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <h4 class="modal-title">Edytuj</h4>
+                       <p>id: {{ row.id }}</p>
+                   </div>
+                   <div class="modal-body">
+                       <form action="{{url_for('update')}}" method="POST">
+                    <div class="form-group">
+                          <label>Nazwa:</label>
+                           <input type="hidden"  name="id" value="{{row.id}}">
+                        <input type="hidden"  name="type" value="{{row.type }}">
+                        <input type="hidden"  name="patient" value="{{patient.id}}">
+
+                          <input type="text" class="form-control" name="name" value="{{row.name}}" maxlength="70">
+
+                       </div>
+                           {% if row.type == 'value' %}
+                           <div class="form-group">
+                          <label>Wartość:</label>
+
+                          <input type="text" class="form-control" name="value" value="{{row.value}}" maxlength="25">
+
+                       </div>
+                           {% endif %}
+                            <div class="form-group">
+                      <button class="btn btn-primary" type="submit">Update</button>
+                   </div>
+                       </form>
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+{% from "edit_history.html" import edit_history with context %}
+<div class="edit_history">
+    {{ edit_history() }}
+</div>
+
+
+</section>
+</div>
+{% endfor %}
+</div>
+{% endmacro  %}

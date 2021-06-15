@@ -1,0 +1,114 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='patient.css') }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='patient_history.css') }}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Pacjent</title>
+</head>
+<body>
+  <div class="cards" id="header">
+    <div class="first">
+        <p>{{patient.birthday}}</p>
+        <p>identifier</p>
+    </div>
+    <div class="second">
+        <h3>{{ patient.name}}  {{ patient.surname}} ({{ patient.gender }})</h3>
+        <p>{{ patient.identifier }}</p>
+    </div>
+  </div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissable" role="alert" style="width: 70%; margin: auto;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+        <span aria-hidden="true">x</span>
+    </button>
+{{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+    <div class="cards" id="content">
+
+    <div class="title-chart">
+        <h1>Historia leczenia Pacjenta</h1>
+        <a class="chart-click" href="{{ url_for('patient_chart', id=patient.id ) }}" target="_blank">
+        <i class="fas fa-chart-line" ></i>
+        </a>
+    </div>
+    <div class="datepicker">
+        <form action="{{ url_for('patient_history', id = patient.id) }}" method="post">
+        <label for="input_from">From</label>
+        <input type="date" id="input_from" class="myinput" name="input_from" value={{ input_data.from }} >
+        <label for="input_to">To</label>
+        <input type="date" id="input_to" class="myinput" name="input_to" onchange="input_from_max()" value={{ input_data.to }}>
+
+        <button id="button" class="filter_btn"  >Filtruj</button>
+        </form>
+    </div>
+
+    {% from "patient_history.html" import page_history with context %}
+        <div class="patient_history">
+            {{ page_history(data) }}
+        </div>
+
+
+    </div>
+
+{#<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <script>
+
+     var today = new Date();
+    document.getElementById("input_to").setAttribute("max", today.toISOString().substring(0, 10));
+    today.setDate(today.getDate() - 1);
+    document.getElementById("input_from").setAttribute("max", today.toISOString().substring(0, 10));
+
+    function input_from_max(){
+        var input = document.getElementById("input_to").value;
+        var limit_date = new Date(input);
+        limit_date.setDate(limit_date.getDate()-1);
+
+        document.getElementById("input_from").setAttribute("max", limit_date.toISOString().substring(0,10));
+        if (document.getElementById("input_from").value>document.getElementById("input_to").value) {
+          document.getElementById("input_from").value = limit_date.toISOString().substring(0,10);
+        }
+     };
+
+$(document).ready(function () {
+    $(document).on('click', '.view_history', function () {
+        var row_id = $(this).data("id");
+        var patient = $(this).attr("value");
+        $.ajax({
+            url: "/edit_history",
+            method: "POST",
+            data: {row_id: row_id, patient:patient},
+            success: function (data) {
+                $('.row_id').html(data.row_id);
+                $('.my_history').html(data);
+                $('.my_history').append(data.htmlresponse);
+                $('#modalhistory').modal('show');
+            }
+         });
+    });
+});
+</script>
+</body>
+
+
+</html>

@@ -1,0 +1,6 @@
+.idea/
+venv/
+__pycache__/
+backend/__pycache__/
+backend/data/__pycache__/
+run.lnk
